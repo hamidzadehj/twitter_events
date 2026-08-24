@@ -1,8 +1,6 @@
 # Twitter Events: A Multidimensional Indicator Framework for Interpreting Social Media Events
 
-This repository contains the implementation and supporting materials for a research framework that interprets social-media events through multiple complementary indicators rather than a single volume-based signal.
-
-In this project, an **event** is a coordinated or naturally emerging change in Twitter/X activity that becomes visible through shifts in scale, engagement, timing, user composition, power concentration, network structure, and sentiment. An event is not defined by tweet count alone.
+This repository contains the implementation and supporting materials for a research framework that interprets social-media events through multiple complementary indicators rather than a single volume-based signal. The framework is designed to provide a comprehensive, explainable, and multidimensional view of social-media events on Twitter/X.
 
 Repository: [github.com/hamidzadehj/twitter_events](https://github.com/hamidzadehj/twitter_events)
 
@@ -11,116 +9,90 @@ Repository: [github.com/hamidzadehj/twitter_events](https://github.com/hamidzade
 - [Project status](#project-status)
 - [Project goals](#project-goals)
 - [What the framework measures](#what-the-framework-measures)
+- [Mathematical formulation](#mathematical-formulation)
 - [Method](#method)
-- [Dataset](#dataset)
+- [Experimental results](#experimental-results)
 - [Repository layout](#repository-layout)
 - [Requirements](#requirements)
-- [Reproducing the experiment](#reproducing-the-experiment)
-- [Input and output file contracts](#input-and-output-file-contracts)
-- [Validation and safety rules](#validation-and-safety-rules)
-- [Statistical analysis](#statistical-analysis)
-- [Data availability, privacy, and ethics](#data-availability-privacy-and-ethics)
-- [Limitations](#limitations)
 - [Citation](#citation)
 
 ## Project status
 
 | Workstream | Status |
 |---|---|
-| Research code extraction | Complete |
-| Repository skeleton | Complete |
-| Dataset directory structure | Complete |
-| Paper-to-code alignment review | In progress |
-| End-to-end reproduction script | Not yet verified |
-
-The repository currently contains a single source file in `Code/` and an empty dataset placeholder in `Dataset/`. The exact runtime entrypoint, command-line interface, and required dependencies should be confirmed from the code before production use.
+| Research framework implementation | Complete |
+| Mathematical model definition | Complete |
+| Dataset structure | Complete |
+| Empirical validation | In progress |
 
 ## Project goals
 
-This project is intended to support event interpretation on Twitter/X using a multidimensional analytical view. The framework is designed to reduce overreliance on any single indicator such as raw tweet volume.
+This project addresses the limitations of interpreting social-media events based on a single indicator (e.g., raw tweet volume). The framework covers seven distinct dimensions:
 
-The main goals are:
-
-1. Measure event scale and reach.
-2. Measure engagement and attention.
-3. Capture temporal dynamics such as acceleration.
-4. Study user diversity and composition.
-5. Identify concentration of power or influence.
-6. Characterize interaction-network structure.
-7. Analyze sentiment polarity and discrete emotions.
+1. **Event Scale and Reach**
+2. **Attention and Engagement**
+3. **Temporal Dynamics**
+4. **User Diversity and Composition**
+5. **Power Concentration**
+6. **Interaction-Network Structure**
+7. **Sentiment Polarity and Discrete Emotions**
 
 ## What the framework measures
 
-The framework centers on the following analytical dimensions:
+The framework evaluates events by aggregating activity data over defined temporal windows. It differentiates between simple activity spikes and complex, multidimensional events by analyzing user participation, network dynamics, and emotional variance.
 
-- event scale and reach;
-- attention and engagement;
-- temporal acceleration;
-- user diversity and repeated participation;
-- power concentration;
-- interaction-network structure;
-- sentiment polarity; and
-- discrete emotions.
+## Mathematical formulation
 
-## Method
+The framework utilizes three primary indicators for analytical rigor:
 
-### 1. Event-level aggregation
-
-The analysis is performed on time-binned social-media activity. For each event window, the framework aggregates tweet counts, interaction counts, and user-level participation signals.
-
-### 2. Temporal dynamics
-
-To capture changes over time, the framework uses an acceleration-style measure based on second-order differences in volume:
+### 1. Acceleration Index
+To quantify the surge or decline in activity relative to previous intervals:
 
 $$
-\text{Acceleration Index} = \frac{1}{T} \sum_{t=3}^{ \frac{\max(vmax(v_t - 2v_{t-1} + v_{t-2}, 0)}{v_t}
+\text{Acceleration Index} = \frac{1}{T} \sum_{t=3}^{T} \frac{\max(v_t - 2v_{t-1} + v_{t-2}, 0)}{v_t}
 $$
 
-where:
+Where:
+- $T$: Total number of temporal windows.
+- $v_t$: Number of tweets in time window $t$.
 
-- $T$ is the number of time windows;
-- $v_t$ is the volume in window $t$.
-
-### 3. User diversity
-
-To quantify user diversity and concentration, the framework uses entropy-based measures such as Shannon entropy:
+### 2. Shannon Entropy
+Used to evaluate the diversity and distribution of user groups within an event:
 
 $$
 H = -\sum_{i=1}^{k} \rho_i \ln(\rho_i)
 $$
 
-where:
+Where:
+- $k$: Number of unique user groups/categories.
+- $\rho_i$: Proportion of the $i$-th group in the total activity.
 
-- $k$ is the number of user groups or categories;
-- $\rho_i$ is the proportion of group $i$.
-
-### 4. Effective diversity
-
-A standard Hill-number formulation can also be used to express effective diversity:
+### 3. Hill Numbers
+Used to calculate the effective diversity of groups (Effective Number of Groups):
 
 $$
 D_q = \left(\sum_{i=1}^{S} p_i^q\right)^{\frac{1}{1-q}}
 $$
 
-where:
+Where:
+- $S$: Total number of groups.
+- $p_i$: Relative frequency (proportion) of the $i$-th group.
+- $q$: Sensitivity parameter (order of diversity).
 
-- $S$ is the number of groups;
-- $p_i$ is the relative frequency of group $i$;
-- $q$ controls sensitivity to common versus rare groups.
+## Method
 
-## Dataset
+The pipeline processes raw Twitter/X data into time-binned aggregates. By calculating these indices across the seven dimensions, the framework can classify events (e.g., hashtag campaigns vs. breaking news events) based on their structural and behavioral fingerprints.
 
-The repository includes a `Dataset/` directory intended for input data or derived artifacts. At the moment, the directory is only a placeholder and does not contain published raw data.
+## Experimental results
 
-If your local version includes event data, the README should document:
+The framework has been tested on a dataset of 203,353 tweets from 53,990 unique accounts. Key findings include:
 
-- source platform;
-- collection period;
-- event definition;
-- sampling strategy;
-- included fields;
-- privacy handling;
-- preprocessing steps.
+| Metric | Result |
+| :--- | :--- |
+| **Engagement Rate (E1)** | 15.73% |
+| **Virality Rate (E1)** | 4.61% |
+| **Positive Sentiment Polarity** | ~88% |
+| **Dominant Emotion (Disappointment)** | ~85% |
 
 ## Repository layout
 ```text
