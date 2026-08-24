@@ -278,27 +278,8 @@ The acceleration index is defined as:
 
 
 
-\\\[
+$$\text{Acceleration Index} = \frac{1}{T} \sum_{t=3}^{T} \frac{\max(v_t - 2v_{t-1} + v_{t-2}, 0)}{v_t}$$
 
-\\text{Acceleration Index}
-
-=
-
-\\frac{1}{T}
-
-\\sum\_{t=3}^{T}
-
-\\frac{
-
-\\max(v\_t - 2v\_{t-1} + v\_{t-2}, 0)
-
-}{
-
-v\_t
-
-}
-
-\\]
 
 
 
